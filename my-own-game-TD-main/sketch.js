@@ -3,6 +3,7 @@ var doodlejump,characterimg
 var background,backgroundimg
 var obstacle,obstacleimg
 var obstaclegroup
+var score=0
 function preload(){
   characterimg=loadImage("character.png");
   backgroundimg=loadImage('background.jpg');
@@ -19,10 +20,10 @@ function setup(){
   doodlejump=createSprite(450,400,20,20);
   doodlejump.addImage("character",characterimg);
   doodlejump.scale=0.2;
-  doodlejump.debug=true
+  //doodlejump.debug=true
+doodlejump.setCollider('rectangle',0,0,10,10)
 
-
-  ground=createSprite(450,480,900,5)
+  
  
   obstaclegroup=new Group() 
 }
@@ -47,16 +48,28 @@ function draw(){
   }
 
  if (obstaclegroup.isTouching(doodlejump)){
-  doodlejump.velocityY=0
+  //doodlejump.velocityY=0
+  doodlejump.velocityY-=15
+  score++
  }
 
+
 spawnObstacles()
-  doodlejump.collide(ground);
+  
 drawSprites()
+if (doodlejump.y>500){
+  doodlejump.velocityY=0;
+  textSize(50)
+  text('GAME OVER',400,250)
+  bg.velocityY=0
+  obstaclegroup.destroyEach()
+}
+textSize(25)
+text('SCORE '+score,600,50)
 }
 
 function spawnObstacles(){
-  if (frameCount%80==0){
+  if (frameCount%40==0){
     obstacle=createSprite(random(50,900),0)
     obstacle.addImage('obstacle',obstacleimg)
  
